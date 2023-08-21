@@ -1,0 +1,24 @@
+import React, { useState } from 'react';
+
+function App() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleCardClick = () => {
+    setIsOpen(!isOpen);
+  };
+
+  return (
+    <div>
+      <div className="card" onClick={handleCardClick}>
+        {/* Content of the main card */}
+      </div>
+      {isOpen && (
+        <div className="another-card">
+          {/* Content of the additional card */}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default App;
