@@ -1,20 +1,32 @@
 import React, { useState } from 'react';
 
 function App() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isPasswordChangeOpen, setIsPasswordChangeOpen] = useState(false);
+  const [newPassword, setNewPassword] = useState('');
 
-  const handleCardClick = () => {
-    setIsOpen(!isOpen);
+  const handlePasswordChangeClick = () => {
+    setIsPasswordChangeOpen(!isPasswordChangeOpen);
+  };
+
+  const handleNewPasswordChange = (event) => {
+    setNewPassword(event.target.value);
   };
 
   return (
     <div>
-      <div className="card" onClick={handleCardClick}>
-        {/* Content of the main card */}
+      <div className="profile-card">
+        {/* Profile card content */}
+        <button onClick={handlePasswordChangeClick}>Change Password</button>
       </div>
-      {isOpen && (
-        <div className="another-card">
-          {/* Content of the additional card */}
+      {isPasswordChangeOpen && (
+        <div className="password-change-card">
+          <input
+            type="password"
+            placeholder="Enter new password"
+            value={newPassword}
+            onChange={handleNewPasswordChange}
+          />
+          {/* Additional UI elements for password change */}
         </div>
       )}
     </div>
