@@ -1,0 +1,76 @@
+// ChangePasswordModal.js
+import React, { useState } from 'react';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+
+const ChangePasswordModal = ({ onClose }) => {
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+    setError('');
+  };
+
+  const handleConfirmPasswordChange = (event) => {
+    setConfirmPassword(event.target.value);
+    setError('');
+  };
+
+  const isSubmitDisabled = () => {
+    // Your validation logic here
+  };
+
+  const getErrorMessage = () => {
+    // Your error message logic here
+  };
+
+  const handleButtonClick = () => {
+    const errorMessage = getErrorMessage();
+    if (errorMessage) {
+      setError(errorMessage);
+    } else {
+      setError('');
+      setSuccessMessage('Password changed successfully');
+      setIsButtonDisabled(false); // Enable the button after successful change
+    }
+  };
+
+  return (
+    <div>
+      <Typography variant="h2">Change Password</Typography>
+      {successMessage && <Typography variant="body1">{successMessage}</Typography>}
+      <div>
+        <TextField
+          label="New Password"
+          type="password"
+          value={password}
+          onChange={handlePasswordChange}
+        />
+      </div>
+      <div>
+        <TextField
+          label="Confirm Password"
+          type="password"
+          value={confirmPassword}
+          onChange={handleConfirmPasswordChange}
+        />
+      </div>
+      {error && <Typography variant="body1" color="error">{error}</Typography>}
+      <Button
+        variant="contained"
+        onClick={handleButtonClick}
+        disabled={isButtonDisabled || isSubmitDisabled()}
+      >
+        Change Password
+      </Button>
+      <Button onClick={onClose}>Cancel</Button>
+    </div>
+  );
+};
+
+export default ChangePasswordModal;
