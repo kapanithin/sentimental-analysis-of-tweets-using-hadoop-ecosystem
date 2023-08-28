@@ -1,7 +1,6 @@
 // ChangePasswordModal.js
 import React, { useState } from 'react';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 const ChangePasswordModal = ({ onClose }) => {
@@ -74,3 +73,43 @@ const ChangePasswordModal = ({ onClose }) => {
 };
 
 export default ChangePasswordModal;
+
+
+
+
+
+
+
+
+// App.js
+import React, { useState } from 'react';
+import Button from '@mui/material/Button';
+import Modal from '@mui/material/Modal';
+import ChangePasswordModal from './ChangePasswordModal'; // Import the modal content component
+
+const App = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  return (
+    <div>
+      <Button onClick={handleOpenModal} disabled={isModalOpen}>
+        Change Password
+      </Button>
+      <Modal open={isModalOpen} onClose={handleCloseModal}>
+        <div>
+          <ChangePasswordModal onClose={handleCloseModal} />
+        </div>
+      </Modal>
+    </div>
+  );
+};
+
+export default App;
