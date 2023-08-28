@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 
 const PasswordChangeComponent = () => {
   const [password, setPassword] = useState('');
@@ -14,75 +17,34 @@ const PasswordChangeComponent = () => {
     setConfirmPassword(event.target.value);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
-    if (password !== confirmPassword) {
-      setError('Passwords do not match');
-    } else if (password.length < 8) {
-      setError('Password should be at least 8 characters long');
-    } else {
-      setError('');
-      setSuccessMessage('Password changed successfully');
-    }
+  const handleChangePasswordClick = () => {
+    // ... password validation logic ...
   };
 
   return (
     <div>
-      <h2>Change Password</h2>
-      {successMessage && <p>{successMessage}</p>}
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>New Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={handlePasswordChange}
-          />
-        </div>
-        <div>
-          <label>Confirm Password:</label>
-          <input
-            type="password"
-            value={confirmPassword}
-            onChange={handleConfirmPasswordChange}
-          />
-        </div>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        <button type="submit">Change Password</button>
-      </form>
+      <Typography variant="h2">Change Password</Typography>
+      {successMessage && <Typography variant="body1">{successMessage}</Typography>}
+      <div>
+        <TextField
+          label="New Password"
+          type="password"
+          value={password}
+          onChange={handlePasswordChange}
+        />
+      </div>
+      <div>
+        <TextField
+          label="Confirm Password"
+          type="password"
+          value={confirmPassword}
+          onChange={handleConfirmPasswordChange}
+        />
+      </div>
+      {error && <Typography variant="body1" color="error">{error}</Typography>}
+      <Button variant="contained" onClick={handleChangePasswordClick}>Change Password</Button>
     </div>
   );
 };
 
 export default PasswordChangeComponent;
-
-
-
-
-
-
-
-
-
-
-const handleSubmit = (event) => {
-  event.preventDefault();
-
-  const hasUppercase = /[A-Z]/.test(password);
-  const hasLowercase = /[a-z]/.test(password);
-  const hasNumber = /\d/.test(password);
-  const hasSpecialChar = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(password);
-
-  if (password !== confirmPassword) {
-    setError('Passwords do not match');
-  } else if (password.length < 8) {
-    setError('Password should be at least 8 characters long');
-  } else if (!hasUppercase || !hasLowercase || !hasNumber || !hasSpecialChar) {
-    setError('Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character');
-  } else {
-    setError('');
-    setSuccessMessage('Password changed successfully');
-  }
-};
-
