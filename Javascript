@@ -1,36 +1,44 @@
-import React, { useState } from 'react';
+document.addEventListener('DOMContentLoaded', function () {
+  var currentPasswordInput = document.getElementById('currentPassword');
+  var newPasswordInput = document.getElementById('newPassword');
+  var retypePasswordInput = document.getElementById('retypePassword');
+  var submitBtn = document.getElementById('submitBtn');
+  var message = document.getElementById('message');
 
-function App() {
-  const [isPasswordChangeOpen, setIsPasswordChangeOpen] = useState(false);
-  const [newPassword, setNewPassword] = useState('');
+  submitBtn.addEventListener('click', function () {
+    var currentPassword = currentPasswordInput.value;
+    var newPassword = newPasswordInput.value;
+    var retypePassword = retypePasswordInput.value;
 
-  const handlePasswordChangeClick = () => {
-    setIsPasswordChangeOpen(!isPasswordChangeOpen);
-  };
+    // Reset message
+    message.textContent = '';
 
-  const handleNewPasswordChange = (event) => {
-    setNewPassword(event.target.value);
-  };
+    if (currentPassword === "" || newPassword === "" || retypePassword === "") {
+      message.textContent = 'All fields are required.';
+    } else if (newPassword !== retypePassword) {
+      message.textContent = 'New password and retype password do not match.';
+    } else if (validatePassword(newPassword)) {
+      message.textContent = 'Password changed successfully.';
+    } else {
+      message.textContent = 'New password is not valid.';
+    }
+  });
 
-  return (
-    <div>
-      <div className="profile-card">
-        {/* Profile card content */}
-        <button onClick={handlePasswordChangeClick}>Change Password</button>
-      </div>
-      {isPasswordChangeOpen && (
-        <div className="password-change-card">
-          <input
-            type="password"
-            placeholder="Enter new password"
-            value={newPassword}
-            onChange={handleNewPasswordChange}
-          />
-          {/* Additional UI elements for password change */}
-        </div>
-      )}
-    </div>
-  );
-}
+  function validatePassword(password) {
+    // Define password requirements
+    var minLength = 8;
+    var hasUppercase = /[A-Z]/.test(password);
+    var hasLowercase = /[a-z]/.test(password);
+    var hasNumbers = /[0-9]/.test(password);
+    var hasSpecialChars = /[!@#$%^&*()_+{}\[\]:;<>,.?~\-]/.test(password);
 
-export default App;
+    // Check if all requirements are met
+    return (
+      password.length >= minLength &&
+      hasUppercase &&
+      hasLowercase &&
+      hasNumbers &&
+      hasSpecialChars
+    );
+  }
+});
