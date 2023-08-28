@@ -56,3 +56,33 @@ const PasswordChangeComponent = () => {
 };
 
 export default PasswordChangeComponent;
+
+
+
+
+
+
+
+
+
+
+const handleSubmit = (event) => {
+  event.preventDefault();
+
+  const hasUppercase = /[A-Z]/.test(password);
+  const hasLowercase = /[a-z]/.test(password);
+  const hasNumber = /\d/.test(password);
+  const hasSpecialChar = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(password);
+
+  if (password !== confirmPassword) {
+    setError('Passwords do not match');
+  } else if (password.length < 8) {
+    setError('Password should be at least 8 characters long');
+  } else if (!hasUppercase || !hasLowercase || !hasNumber || !hasSpecialChar) {
+    setError('Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character');
+  } else {
+    setError('');
+    setSuccessMessage('Password changed successfully');
+  }
+};
+
