@@ -1,59 +1,58 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Password Validation</title>
-</head>
-<body>
-  <label for="currentPassword">Current Password:</label>
-  <input type="password" id="currentPassword" /><br>
-  
-  <label for="newPassword">New Password:</label>
-  <input type="password" id="newPassword" /><br>
-  
-  <label for="retypePassword">Retype Password:</label>
-  <input type="password" id="retypePassword" /><br>
-  
-  <button id="submitBtn">Change Password</button>
-  <p id="message"></p>
+import React, { useState } from 'react';
 
-  <script>
-    document.getElementById('submitBtn').addEventListener('click', function () {
-      var currentPassword = document.getElementById('currentPassword').value;
-      var newPassword = document.getElementById('newPassword').value;
-      var retypePassword = document.getElementById('retypePassword').value;
-      var message = document.getElementById('message');
+const PasswordChangeComponent = () => {
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
-      // Reset message
-      message.textContent = '';
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+  };
 
-      if (currentPassword === "" || newPassword === "" || retypePassword === "") {
-        message.textContent = 'All fields are required.';
-      } else if (newPassword !== retypePassword) {
-        message.textContent = 'New password and retype password do not match.';
-      } else if (validatePassword(newPassword)) {
-        message.textContent = 'Password changed successfully.';
-      } else {
-        message.textContent = 'New password is not valid.';
-      }
-    });
+  const handleConfirmPasswordChange = (event) => {
+    setConfirmPassword(event.target.value);
+  };
 
-    function validatePassword(password) {
-      // Define password requirements
-      var minLength = 8;
-      var hasUppercase = /[A-Z]/.test(password);
-      var hasLowercase = /[a-z]/.test(password);
-      var hasNumbers = /[0-9]/.test(password);
-      var hasSpecialChars = /[!@#$%^&*()_+{}\[\]:;<>,.?~\-]/.test(password);
+  const handleSubmit = (event) => {
+    event.preventDefault();
 
-      // Check if all requirements are met
-      return (
-        password.length >= minLength &&
-        hasUppercase &&
-        hasLowercase &&
-        hasNumbers &&
-        hasSpecialChars
-      );
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
+    } else if (password.length < 8) {
+      setError('Password should be at least 8 characters long');
+    } else {
+      setError('');
+      setSuccessMessage('Password changed successfully');
     }
-  </script>
-</body>
-</html>
+  };
+
+  return (
+    <div>
+      <h2>Change Password</h2>
+      {successMessage && <p>{successMessage}</p>}
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>New Password:</label>
+          <input
+            type="password"
+            value={password}
+            onChange={handlePasswordChange}
+          />
+        </div>
+        <div>
+          <label>Confirm Password:</label>
+          <input
+            type="password"
+            value={confirmPassword}
+            onChange={handleConfirmPasswordChange}
+          />
+        </div>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+        <button type="submit">Change Password</button>
+      </form>
+    </div>
+  );
+};
+
+export default PasswordChangeComponent;
