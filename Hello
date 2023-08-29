@@ -1,106 +1,25 @@
 import React, { useState } from 'react';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 
-const PasswordChangeComponent = () => {
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
+function App() {
+  const [xmlContent, setXmlContent] = useState('');
 
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
-    setError('');
-  };
-
-  const handleConfirmPasswordChange = (event) => {
-    setConfirmPassword(event.target.value);
-  };
-
-  const isSubmitDisabled = () => {
-    return (
-      password !== confirmPassword ||
-      password.length < 8 ||
-      !/[A-Z]/.test(password) ||
-      !/[a-z]/.test(password) ||
-      !/\d/.test(password) ||
-      !/[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(password)
-    );
-  };
-
-  const getErrorMessage = () => {
-    if (password !== confirmPassword) {
-      return 'Passwords do not match';
-    }
-    if (password.length < 8) {
-      return 'Password should be at least 8 characters long';
-    }
-    if (!/[A-Z]/.test(password)) {
-      return 'Password must contain at least one uppercase letter';
-    }
-    if (!/[a-z]/.test(password)) {
-      return 'Password must contain at least one lowercase letter';
-    }
-    if (!/\d/.test(password)) {
-      return 'Password must contain at least one number';
-    }
-    if (!/[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(password)) {
-      return 'Password must contain at least one special character';
-    }
-    return '';
-  };
-
-  const handleConfirmPasswordBlur = () => {
-    const errorMessage = getErrorMessage();
-    if (errorMessage) {
-      setError(errorMessage);
-    } else {
-      setError('');
-    }
-  };
-
-  const handleChangePasswordClick = () => {
-    const errorMessage = getErrorMessage();
-    if (errorMessage) {
-      setError(errorMessage);
-    } else {
-      setError('');
-      setSuccessMessage('Password changed successfully');
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setXmlContent(e.target.result);
+      };
+      reader.readAsText(file);
     }
   };
 
   return (
     <div>
-      <Typography variant="h2">Change Password</Typography>
-      {successMessage && <Typography variant="body1">{successMessage}</Typography>}
-      <div>
-        <TextField
-          label="New Password"
-          type="password"
-          value={password}
-          onChange={handlePasswordChange}
-        />
-      </div>
-      <div>
-        <TextField
-          label="Confirm Password"
-          type="password"
-          value={confirmPassword}
-          onChange={handleConfirmPasswordChange}
-          onBlur={handleConfirmPasswordBlur}
-        />
-      </div>
-      {error && <Typography variant="body1" color="error">{error}</Typography>}
-      <Button
-        variant="contained"
-        onClick={handleChangePasswordClick}
-        disabled={isSubmitDisabled()}
-      >
-        Change Password
-      </Button>
+      <input type="file" accept=".xml" onChange={handleFileChange} />
+      {xmlContent && <pre>{xmlContent}</pre>}
     </div>
   );
-};
+}
 
-export default PasswordChangeComponent;
+export default App;
