@@ -1,32 +1,26 @@
-// App.js
-import React, { useState } from 'react';
-import Button from '@mui/material/Button';
-import Modal from '@mui/material/Modal';
-import ChangePasswordModal from './ChangePasswordModal'; // Import the modal content component
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-const App = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+@Service
+public class UserService {
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
+    @Autowired
+    private UserRepository userRepository;
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
+    public ChangePasswordResponse changePassword(ChangePasswordRequest request) {
+        User user = userRepository.findByUsername(request.getUsername());
 
-  return (
-    <div>
-      <Button onClick={handleOpenModal} disabled={isModalOpen}>
-        Change Password
-      </Button>
-      <Modal open={isModalOpen} onClose={handleCloseModal}>
-        <div>
-          <ChangePasswordModal onClose={handleCloseModal} />
-        </div>
-      </Modal>
-    </div>
-  );
-};
+        if (user == null) {
+            return new ChangePasswordResponse(false, "User not found");
+        }
 
-export default App;
+        if (!user.getPassword().equals(request.getOldPassword())) {
+            return new ChangePasswordResponse(false, "Old password is incorrect");
+        }
+
+        user.setPassword(request.getNewPassword());
+        userRepository.save(user);
+
+        return new ChangePasswordResponse(true, "Password changed successfully");
+    }
+}
