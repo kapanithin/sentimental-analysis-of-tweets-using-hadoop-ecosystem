@@ -1,0 +1,37 @@
+import React, { useState } from 'react';
+
+function App() {
+  const [xmlContent, setXmlContent] = useState('');
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setXmlContent(e.target.result);
+      };
+      reader.readAsText(file);
+    }
+  };
+
+  const XMLViewer = () => (
+    <div>
+      <h2>XML Viewer</h2>
+      <pre>{xmlContent}</pre>
+    </div>
+  );
+
+  return (
+    <div>
+      <input type="file" accept=".xml" onChange={handleFileChange} />
+      {xmlContent && (
+        <div>
+          <button onClick={() => setXmlContent('')}>Clear XML</button>
+          <XMLViewer />
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default App;
