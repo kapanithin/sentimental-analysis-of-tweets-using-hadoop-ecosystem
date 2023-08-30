@@ -1,0 +1,16 @@
+function fetchDataAndCompare(userInput) {
+  axios.get('your-database-api-endpoint')
+    .then(response => {
+      const databaseData = response.data;
+      const foundItem = databaseData.find(item => item.propertyToCompare === userInput);
+
+      if (foundItem) {
+        // Data found, do something
+      } else {
+        // Data not found, do something else
+      }
+    })
+    .catch(error => {
+      console.error('Error fetching data:', error);
+    });
+}
