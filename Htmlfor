@@ -1,0 +1,21 @@
+<Paper elevation={3} style={{ marginTop: '16px' }}>
+    <Table>
+        <TableHead>
+            <TableRow>
+                {data[0] &&
+                    Object.keys(data[0]).map((header, index) => (
+                        <TableCell key={index}>{header}</TableCell>
+                    ))}
+            </TableRow>
+        </TableHead>
+        <TableBody>
+            {data.map((row, rowIndex) => (
+                <TableRow key={rowIndex}>
+                    {Object.values(row).map((value, valueIndex) => (
+                        <TableCell key={valueIndex}>{value}</TableCell>
+                    ))}
+                </TableRow>
+            ))}
+        </TableBody>
+    </Table>
+</Paper>
