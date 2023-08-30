@@ -1,0 +1,92 @@
+import React, { useState } from 'react';
+import Papa from 'papaparse';
+import {
+    Button,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+} from '@mui/material';
+
+function XMLToCSVViewer() {
+    const [data, setData] = useState([]);
+    const [file, setFile] = useState(null);
+
+    const handleFileChange = (event) => {
+        setFile(event.target.files[0]);
+    };
+
+    const handleParse = () => {
+        if (!file) {
+            console.error('No file selected.');
+            return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+            const content = e.target.result;
+            const fileType = file.name.split('.').pop().toLowerCase();
+
+            if (fileType === 'xml') {
+                // Parse XML content here and update data state
+            } else if (fileType === 'csv') {
+                // Parse CSV content using 'papaparse'
+                Papa.parse(content, {
+                    complete: (result) => {
+                        if (result.data && result.data.length > 0) {
+                            const headers = result.data[0];
+                            const rows = result.data.slice(1);
+
+                            // Update the data state
+                            setData(
+                                rows.map((row) => {
+                                    return Object.fromEntries(
+                                        headers.map((header, idx) => [header, row[idx]])
+                                    );
+                                })
+                            );
+                        }
+                    },
+                });
+            } else if (fileType === 'pdf') {
+                // Display the PDF using an <iframe>
+                const pdfUrl = URL.createObjectURL(file);
+                setPdfUrl(pdfUrl); // Save the PDF URL to state
+            } else {
+                console.error('Unsupported file type.');
+            }
+        };
+
+        reader.readAsArrayBuffer(file);
+    };
+
+    const [pdfUrl, setPdfUrl] = useState(null);
+
+    return (
+        <div>
+            <input type="file" onChange={handleFileChange} />
+            <Button variant="contained" color="primary" onClick={handleParse}>
+                Upload and Parse File
+            </Button>
+            <Paper elevation={3} style={{ marginTop: '16px' }}>
+                <Table>
+                    {/* Table rendering logic */}
+                </Table>
+            </Paper>
+            {pdfUrl && (
+                <iframe
+                    title="PDF Viewer"
+                    src={pdfUrl}
+                    width="100%"
+                    height="600"
+                    style={{ border: 'none' }}
+                />
+            )}
+        </div>
+    );
+}
+
+export default XMLToCSVViewer;
