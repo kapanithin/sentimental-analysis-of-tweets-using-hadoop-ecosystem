@@ -1,0 +1,42 @@
+import Papa from 'papaparse';
+
+// ...
+
+const handleUpload = () => {
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+        const fileType = file.name.split('.').pop().toLowerCase();
+
+        if (fileType === 'xml') {
+            // Existing XML parsing logic
+        } else if (fileType === 'csv') {
+            const csvContent = e.target.result; // CSV content as a string
+
+            // Parse the CSV content using 'papaparse'
+            Papa.parse(csvContent, {
+                complete: (result) => {
+                    if (result.data && result.data.length > 0) {
+                        // Extract headers and rows from the parsed result
+                        const headers = result.data[0];
+                        const rows = result.data.slice(1);
+
+                        // Update the data state
+                        setData(
+                            rows.map((row) => {
+                                return Object.fromEntries(
+                                    headers.map((header, idx) => [header, row[idx]])
+                                );
+                            })
+                        );
+                    }
+                }
+            });
+        } else {
+            // Handle unsupported file types or show an error message
+            console.error('Unsupported file type');
+        }
+    };
+
+    reader.readAsText(file);
+};
