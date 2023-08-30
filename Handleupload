@@ -38,3 +38,41 @@ const handleUpload = () => {
 
     reader.readAsText(file);
 };
+
+
+
+
+
+const handleUpload = () => {
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+        const fileType = file.name.split('.').pop().toLowerCase();
+
+        if (fileType === 'xml') {
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(e.target.result, 'text/xml');
+
+            const rows = Array.from(xmlDoc.documentElement.children);
+            const headers = Array.from(rows[0].children).map((el) => el.nodeName);
+
+            const parsedData = rows.map((row) => {
+                const values = headers.map(
+                    (header) => row.getElementsByTagName(header)[0].textContent
+                );
+                return Object.fromEntries(
+                    values.map((value, idx) => [headers[idx], value])
+                );
+            });
+
+            setData(parsedData);
+        } else if (fileType === 'csv') {
+            // Display CSV data directly (handle this logic)
+            // You might need to use a CSV parsing library like 'papaparse'
+        } else {
+            // Handle unsupported file types or show an error message
+        }
+    };
+
+    reader.readAsText(file);
+};
