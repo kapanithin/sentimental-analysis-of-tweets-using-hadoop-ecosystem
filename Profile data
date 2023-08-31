@@ -1,0 +1,24 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+function ProfilePage() {
+  const [userData, setUserData] = useState({});
+
+  useEffect(() => {
+    // Make API request to fetch user data
+    axios.get('/api/profile')
+      .then(response => setUserData(response.data))
+      .catch(error => console.error(error));
+  }, []);
+
+  return (
+    <div>
+      <h1>Profile Page</h1>
+      <p>Name: {userData.name}</p>
+      <p>Email: {userData.email}</p>
+      {/* Display other user details */}
+    </div>
+  );
+}
+
+export default ProfilePage;
