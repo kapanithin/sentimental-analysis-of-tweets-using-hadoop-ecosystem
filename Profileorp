@@ -1,0 +1,66 @@
+import React, { useState } from 'react';
+import axios from 'axios';
+import { useHistory } from 'react-router-dom';
+
+function LoginPage() {
+  const history = useHistory();
+  const [userId, setUserId] = useState('');
+
+  const handleLogin = () => {
+    // Make API request to retrieve user's ID after login
+    axios.post('/api/user/login', { username, password })
+      .then(response => {
+        setUserId(response.data.userId);
+        history.push('/profile'); // Redirect to profile page
+      })
+      .catch(error => console.error(error));
+  };
+
+  return (
+    <div>
+      <h1>Login Page</h1>
+      {/* Render login form and handle user input */}
+      <button onClick={handleLogin}>Login</button>
+    </div>
+  );
+}
+
+export default LoginPage;
+
+
+
+
+
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+function ProfilePage() {
+  const [userData, setUserData] = useState({});
+  const userId = localStorage.getItem('userId'); // Retrieve user ID from storage
+
+  useEffect(() => {
+    if (userId) {
+      // Make API request to fetch user's profile using the stored user ID
+      axios.get(`/api/user/profile/${userId}`)
+        .then(response => setUserData(response.data))
+        .catch(error => console.error(error));
+    }
+  }, [userId]);
+
+  return (
+    <div>
+      <h1>Profile Page</h1>
+      <p>Name: {userData.name}</p>
+      <p>Email: {userData.email}</p>
+      {/* Display other user details */}
+    </div>
+  );
+}
+
+export default ProfilePage;
+
+
+
+
+
+
