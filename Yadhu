@@ -1,0 +1,50 @@
+import React, { useState } from 'react';
+import axios from 'axios';
+import JSZip from 'jszip';
+
+const ReportDownloader = () => {
+    const [fromDate, setFromDate] = useState('');
+    const [toDate, setToDate] = useState('');
+
+    const handleDownload = async () => {
+        const response = await axios.post('/api/reports/generate', {
+            fromDate,
+            toDate
+        });
+        const reportUrls = response.data;
+
+        const zip = new JSZip();
+        const folder = zip.folder('reports');
+
+        for (const reportUrl of reportUrls) {
+            const reportName = reportUrl.substring(reportUrl.lastIndexOf('/') + 1);
+            const reportBlob = await fetch(reportUrl).then(response => response.blob());
+            folder.file(reportName, reportBlob);
+        }
+
+        zip.generateAsync({ type: 'blob' }).then(content => {
+            const downloadLink = document.createElement('a');
+            downloadLink.href = URL.createObjectURL(content);
+            downloadLink.download = 'reports.zip';
+            downloadLink.click();
+        });
+    };
+
+    return (
+        <div>
+            <input
+                type="date"
+                value={fromDate}
+                onChange={e => setFromDate(e.target.value)}
+            />
+            <input
+                type="date"
+                value={toDate}
+                onChange={e => setToDate(e.target.value)}
+            />
+            <button onClick={handleDownload}>Download Report</button>
+        </div>
+    );
+};
+
+export default ReportDownloader;
