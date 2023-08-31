@@ -1,0 +1,50 @@
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
+// Your Controller class
+public class ReportController {
+    
+    // Your existing method for downloading a single file
+    @GetMapping("/report/download/{reportId}")
+    public ResponseEntity<byte[]> downloadFile(@PathVariable UUID reportId) {
+        // Retrieve single file data here...
+        // ...
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .header("Content-Disposition", "attachment; filename=" + "filename.zip")
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(zipFilesIntoByteArray(List.of(fileData1, fileData2, ...))); // Add all your fileData
+    }
+    
+    // Method to zip multiple files into a byte array
+    private byte[] zipFilesIntoByteArray(List<byte[]> files) {
+        try {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            ZipOutputStream zipOutputStream = new ZipOutputStream(byteArrayOutputStream);
+
+            for (int i = 0; i < files.size(); i++) {
+                ZipEntry zipEntry = new ZipEntry("file" + (i + 1) + ".pdf"); // You can set appropriate file names
+                zipOutputStream.putNextEntry(zipEntry);
+                zipOutputStream.write(files.get(i));
+                zipOutputStream.closeEntry();
+            }
+
+            zipOutputStream.close();
+
+            return byteArrayOutputStream.toByteArray();
+        } catch (IOException e) {
+            // Handle the exception appropriately
+            e.printStackTrace();
+            return null;
+        }
+    }
+}
