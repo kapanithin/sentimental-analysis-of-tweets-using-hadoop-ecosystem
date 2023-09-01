@@ -1,0 +1,44 @@
+import React, { useState } from 'react';
+
+const FileTable = () => {
+  const [selectedUrls, setSelectedUrls] = useState([]);
+
+  const handleUrlSelection = (url) => {
+    if (selectedUrls.includes(url)) {
+      setSelectedUrls(selectedUrls.filter(selectedUrl => selectedUrl !== url));
+    } else {
+      setSelectedUrls([...selectedUrls, url]);
+    }
+  };
+
+  const handleDownloadSelected = () => {
+    selectedUrls.forEach(url => {
+      // Trigger download for each URL (e.g., open in new tab)
+      window.open(url, '_blank');
+    });
+  };
+
+  const handleDownloadAll = () => {
+    // Assuming you have an array of all URLs from the backend
+    const allUrlsFromBackend = ["url1", "url2", "url3"]; // Replace with actual URLs
+
+    allUrlsFromBackend.forEach(url => {
+      // Trigger download for each URL (e.g., open in new tab)
+      window.open(url, '_blank');
+    });
+  };
+
+  return (
+    <div>
+      {/* Display your files and checkboxes here */}
+      <button onClick={handleDownloadSelected} disabled={selectedUrls.length === 0}>
+        Download Selected Files
+      </button>
+      <button onClick={handleDownloadAll} disabled={allUrlsFromBackend.length === 0}>
+        Download All Files
+      </button>
+    </div>
+  );
+};
+
+export default FileTable;
