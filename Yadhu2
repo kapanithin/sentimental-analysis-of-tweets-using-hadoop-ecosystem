@@ -1,0 +1,55 @@
+import React, { useState } from 'react';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import { useHistory } from 'react-router-dom'; // You might need to import the appropriate routing library
+
+function Dashboard() {
+  const [open, setOpen] = useState(false);
+  const history = useHistory();
+
+  const handleLogoutClick = () => {
+    setOpen(true);
+  };
+
+  const handleLogoutConfirm = () => {
+    setOpen(false);
+    history.push('/login'); // Redirect to login page
+  };
+
+  const handleLogoutCancel = () => {
+    setOpen(false);
+  };
+
+  return (
+    <div>
+      {/* Dashboard content */}
+      <Button variant="outlined" onClick={handleLogoutClick}>
+        Logout
+      </Button>
+
+      {/* Logout confirmation dialog */}
+      <Dialog open={open} onClose={handleLogoutCancel}>
+        <DialogTitle>Logout Confirmation</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to logout?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleLogoutCancel} color="primary">
+            No
+          </Button>
+          <Button onClick={handleLogoutConfirm} color="primary">
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
+}
+
+export default Dashboard;
