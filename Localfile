@@ -1,0 +1,48 @@
+import React from 'react';
+
+const files = [
+  {
+    name: 'file1.txt',
+    path: '/path/to/file1.txt',
+    size: '100KB',
+    created_at: '2023-09-01',
+    type: 'Text'
+  },
+  {
+    name: 'file2.png',
+    path: '/path/to/file2.png',
+    size: '500KB',
+    created_at: '2023-09-02',
+    type: 'Image'
+  },
+  // Add more file objects as needed
+];
+
+const FileTable = ({ files }) => {
+  return (
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Path</th>
+          <th>Size</th>
+          <th>Date Created</th>
+          <th>Type</th>
+        </tr>
+      </thead>
+      <tbody>
+        {files.map((file, index) => (
+          <tr key={index}>
+            <td>{file.name}</td>
+            <td>{file.path}</td>
+            <td>{file.size}</td>
+            <td>{file.created_at}</td>
+            <td>{file.type}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+};
+
+export default FileTable;
