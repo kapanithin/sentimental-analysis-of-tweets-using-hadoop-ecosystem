@@ -1,0 +1,61 @@
+import React from 'react';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Button,
+} from '@mui/material';
+
+const FileTable = () => {
+  const handleDownload = (fileName) => {
+    // Assuming you have the file content stored in local storage.
+    const fileContent = localStorage.getItem(fileName);
+
+    // Create a Blob from the file content.
+    const blob = new Blob([fileContent], { type: 'application/octet-stream' });
+
+    // Create a download link and trigger a click event to download the file.
+    const a = document.createElement('a');
+    a.href = window.URL.createObjectURL(blob);
+    a.download = fileName;
+    a.click();
+  };
+
+  // Replace these with your actual file names stored in local storage.
+  const fileNames = ['file1.txt', 'file2.pdf'];
+
+  return (
+    <TableContainer component={Paper}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>File Name</TableCell>
+            <TableCell>Action</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {fileNames.map((fileName, index) => (
+            <TableRow key={index}>
+              <TableCell>{fileName}</TableCell>
+              <TableCell>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => handleDownload(fileName)}
+                >
+                  Download
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+};
+
+export default FileTable;
