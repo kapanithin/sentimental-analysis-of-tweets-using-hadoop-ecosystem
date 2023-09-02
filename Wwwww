@@ -1,0 +1,58 @@
+import React from 'react';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Button,
+} from '@mui/material';
+
+const fileData = [
+  { name: 'File 1', path: '/path/to/your/file1.pdf' },
+  { name: 'File 2', path: '/path/to/your/file2.txt' },
+  // Add more file objects with their paths as needed
+];
+
+const FileTable = () => {
+  const handleDownload = (filePath) => {
+    // Create a download link and trigger a click event to download the file.
+    const a = document.createElement('a');
+    a.href = filePath;
+    a.download = filePath.substring(filePath.lastIndexOf('/') + 1); // Set the download file name
+    a.click();
+  };
+
+  return (
+    <TableContainer component={Paper}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>File Name</TableCell>
+            <TableCell>Action</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {fileData.map((file, index) => (
+            <TableRow key={index}>
+              <TableCell>{file.name}</TableCell>
+              <TableCell>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => handleDownload(file.path)}
+                >
+                  Download
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+};
+
+export default FileTable;
