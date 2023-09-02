@@ -1,0 +1,61 @@
+import React from 'react';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
+
+const FileTable = ({ files }) => {
+  const handleDownload = (file) => {
+    // Create a Blob containing the file data
+    const blob = new Blob([file.data], { type: 'application/octet-stream' });
+
+    // Create a URL for the Blob
+    const url = URL.createObjectURL(blob);
+
+    // Create an invisible <a> element to trigger the download
+    const a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = url;
+    a.download = file.name;
+
+    // Trigger a click event on the <a> element to start the download
+    document.body.appendChild(a);
+    a.click();
+
+    // Clean up by revoking the Blob URL and removing the <a> element
+    URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  };
+
+  return (
+    <TableContainer component={Paper}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Name</TableCell>
+            <TableCell>Path</TableCell>
+            <TableCell>Size</TableCell>
+            <TableCell>Date Created</TableCell>
+            <TableCell>Type</TableCell>
+            <TableCell>Action</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {files.map((file, index) => (
+            <TableRow key={index}>
+              <TableCell>{file.name}</TableCell>
+              <TableCell>{file.path}</TableCell>
+              <TableCell>{file.size}</TableCell>
+              <TableCell>{file.created_at}</TableCell>
+              <TableCell>{file.type}</TableCell>
+              <TableCell>
+                <Button variant="contained" onClick={() => handleDownload(file)}>
+                  Download
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+};
+
+export default FileTable;
